@@ -10,6 +10,7 @@ public class Client {
         BufferedReader rebre=null;
         if(args.length !=2){
             System.out.println("Has d'entrar dos arguments, primer el port i despues la paraula clau");
+            scan.close();
             return;
         }
 
@@ -38,6 +39,9 @@ public class Client {
                 xat= scan.nextLine();
 
                 if(xat.equalsIgnoreCase(clau)){
+                    // primer avisa que tancarà
+                    enviar.println("CLIENT_TANCA");
+                    // i opcionalment envia també la paraula clau, si vols mantenir la lògica antiga
                     enviar.println(xat); //envia el missatge al servidor i el printeja
                     System.out.println("Tancant client...OK");
                     return;//Si es posa return, els recursos no es tancaran
@@ -47,6 +51,16 @@ public class Client {
                 System.out.println("Missatge enviat...OK");
 
                 resposta= rebre.readLine();
+                if(resposta==null){
+                    System.out.println("El servidor ha tancat la connexió.");
+                    return;
+                }
+
+                if("SERVIDOR_TANCA".equals(resposta)){
+                    System.out.println("El servidor ha indicat que tanca la connexió.");
+                    return;
+                }
+
                 System.out.println("Servidor: " + resposta);
 
             }
@@ -55,7 +69,7 @@ public class Client {
         }finally {
             try {
                 scan.close();
-                socket.close();
+                if(socket != null) socket.close();
                 System.out.println("Tot tancat");
             }catch (Exception e){
                 System.out.println("Error "+e.getMessage());

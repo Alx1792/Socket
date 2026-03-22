@@ -11,6 +11,7 @@ public class Servidor {
         BufferedReader rebre=null;
         if(args.length !=2){
             System.out.println("Has d'entrar dos arguments, primer el port i despues la paraula clau");
+            scan.close();
             return;
         }
         int port =Integer.parseInt(args[0]);
@@ -33,12 +34,19 @@ public class Servidor {
                     System.out.println("Client ha tancat la connexio");
                     return;
                 }
+
+                if("CLIENT_TANCA".equals(missatgeC)){
+                    System.out.println("El client ha indicat que tanca la connexió.");
+                    return;
+                }
+
                 System.out.println("Client diu: "+missatgeC);
                 if(missatgeC.equalsIgnoreCase(clau)){
                     System.out.println("Client ha enviat la paraula clau");
                     System.out.println("Tancant connexio...OK");
                     return;
                 }
+
                 System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
                 missatgeS= scan.nextLine();
                 enviar.println(missatgeS);
@@ -46,6 +54,8 @@ public class Servidor {
                 if(missatgeS.equalsIgnoreCase(clau)){
                     System.out.println("Servidor ha enviat la seva paraula clau.");
                     System.out.println("Tancant connexió ");
+                    // avís explícit al client abans de tancar
+                    enviar.println("SERVIDOR_TANCA");
                     return;
                 }
             }
@@ -54,8 +64,8 @@ public class Servidor {
         }finally {
             try{
                 scan.close();
-                socketC.close();
-                socketS.close();
+                if(socketC != null) socketC.close();
+                if(socketS != null) socketS.close();
                 System.out.println("Servidor tancat.");
             } catch (Exception e) {
                 e.printStackTrace();
@@ -65,4 +75,3 @@ public class Servidor {
 
     }
 }
-
