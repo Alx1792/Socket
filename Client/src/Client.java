@@ -9,8 +9,10 @@ public class Client {
         PrintWriter enviar=null;
         BufferedReader rebre=null;
         if(args.length !=2){
+            System.out.println("Has d'entrar dos arguments, primer el port i despues la paraula clau");
             return;
         }
+
         try{//Comprovar si hi ha 2 arguments
 
             //Entrar arguments per terminal
@@ -29,8 +31,10 @@ public class Client {
             System.out.println("Connexio preprarada");
 
             String xat;
+            String resposta;
+            System.out.println("Si vols tancar la connexió, escriu la paraula clau");
             while(true){
-                System.out.println("Si vols tancar la connexió, escriu la paraula clau");
+
                 xat= scan.nextLine();
 
                 if(xat.equalsIgnoreCase(clau)){
@@ -42,7 +46,7 @@ public class Client {
                 enviar.println(xat);
                 System.out.println("Missatge enviat...OK");
 
-                String resposta= rebre.readLine();
+                resposta= rebre.readLine();
                 System.out.println("Servidor: " + resposta);
 
             }

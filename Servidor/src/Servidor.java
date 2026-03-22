@@ -1,55 +1,68 @@
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Servidor {
     public static void main(String[] args) {
-        int port = 5000;//Es crear el port
-        try {
-            ServerSocket servidor = new ServerSocket(port);// Es crear el port a partir del server pocket
-            System.out.println("Fent temps a que un client es conecti al servidor " + port );
+        Scanner scan= new Scanner(System.in);
+        ServerSocket socketS=null;
+        Socket socketC=null;
+        PrintWriter enviar=null;
+        BufferedReader rebre=null;
+        if(args.length !=2){
+            System.out.println("Has d'entrar dos arguments, primer el port i despues la paraula clau");
+            return;
+        }
+        int port =Integer.parseInt(args[0]);
+        String clau=args[1];
+        System.out.println("Iniciant servidor en : "+port);
+        try{
+            socketS =new ServerSocket(port);
+            System.out.println("Servidor esperant al client");
+            socketC = socketS.accept();
+            System.out.println("Client connectat...OK");
 
-            while (true) { //el bucle per fer un multiclient i que accepti clients sense parar
-                //Accepta el client amb el socket
-                Socket connexioClient = servidor.accept();
-                System.out.println("Client connectat: " + connexioClient.getInetAddress());
+            rebre=new BufferedReader(new InputStreamReader(socketC.getInputStream()));
+            enviar =new PrintWriter(socketC.getOutputStream(),true);
 
-                Clients c = new Clients(connexioClient); //Crea el fil amb el client per gestionar-lo
-                c.start();//executa el fil
+            String missatgeC;
+            String missatgeS;
+            while(true){
+                missatgeC=rebre.readLine();
+                if(missatgeC==null){
+                    System.out.println("Client ha tancat la connexio");
+                    return;
+                }
+                System.out.println("Client diu: "+missatgeC);
+                if(missatgeC.equalsIgnoreCase(clau)){
+                    System.out.println("Client ha enviat la paraula clau");
+                    System.out.println("Tancant connexio...OK");
+                    return;
+                }
+                System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
+                missatgeS= scan.nextLine();
+                enviar.println(missatgeS);
+
+                if(missatgeS.equalsIgnoreCase(clau)){
+                    System.out.println("Servidor ha enviat la seva paraula clau.");
+                    System.out.println("Tancant connexió ");
+                    return;
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            System.out.println("Error al servidor "+e.getMessage());
+        }finally {
+            try{
+                scan.close();
+                socketC.close();
+                socketS.close();
+                System.out.println("Servidor tancat.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
-    }
-}
-//Representa el fil que gestiona a cada client
-class Clients extends Thread {
-    private Socket connexioClient;
 
-    //Reb el socket i el guarda
-    public Clients(Socket connexioClient) {
-        this.connexioClient = connexioClient;
-    }
-
-    @Override
-    public void run() {
-        try {
-            //Lector per llegir el text que envia el client
-            BufferedReader lectorEntrada = new BufferedReader(
-                    new InputStreamReader(connexioClient.getInputStream()));
-            PrintWriter escriptorSortida = new PrintWriter(connexioClient.getOutputStream(), true);
-            //Crear la un escriptor per llegir el missatge del client
-
-            //llegeix la linea queenvia el client
-            String missatge = lectorEntrada.readLine();
-            //envia la resposta al client
-            System.out.println("Client " + connexioClient.getInetAddress() + " diu: " + missatge);
-            escriptorSortida.println("Hola des del servidor! (IP: " + connexioClient.getInetAddress() + ")");
-
-            //tanca la conexio amb el client
-            connexioClient.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 
