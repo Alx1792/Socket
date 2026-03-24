@@ -41,23 +41,26 @@ public class Servidor {
                 }
 
                 System.out.println("Client diu: "+missatgeC);
-                if(missatgeC.equalsIgnoreCase(clau)){
-                    System.out.println("Client ha enviat la paraula clau");
+                if (conteParaulaPerEspais(missatgeC, clau)) {
+                    System.out.println("Client ha enviat la paraula clau dins del missatge");
                     System.out.println("Tancant connexio...OK");
                     return;
                 }
 
                 System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
                 missatgeS= scan.nextLine();
+
+                // sempre enviem la frase
                 enviar.println(missatgeS);
 
-                if(missatgeS.equalsIgnoreCase(clau)){
-                    System.out.println("Servidor ha enviat la seva paraula clau.");
+                if (conteParaulaPerEspais(missatgeS, clau)) {
+                    System.out.println("Servidor ha enviat la seva paraula clau dins del missatge.");
                     System.out.println("Tancant connexió ");
-                    // avís explícit al client abans de tancar
+                    // AVÍS explícit perquè el client mostri el missatge de tancament
                     enviar.println("SERVIDOR_TANCA");
                     return;
                 }
+
             }
         }catch (Exception e){
             System.out.println("Error al servidor "+e.getMessage());
@@ -74,4 +77,14 @@ public class Servidor {
         }
 
     }
+    private static boolean conteParaulaPerEspais(String text, String clau) {
+        if (text == null || clau == null){
+            return false;
+        }
+        String t = " " + text.trim() + " ";
+        String c = " " + clau.trim() + " ";
+
+        return t.toLowerCase().contains(c.toLowerCase());
+    }
+
 }

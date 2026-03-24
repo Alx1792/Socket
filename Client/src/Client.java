@@ -37,18 +37,15 @@ public class Client {
             while(true){
 
                 xat= scan.nextLine();
-
-                if(xat.equalsIgnoreCase(clau)){
-                    // primer avisa que tancarà
-                    enviar.println("CLIENT_TANCA");
-                    // i opcionalment envia també la paraula clau, si vols mantenir la lògica antiga
-                    enviar.println(xat); //envia el missatge al servidor i el printeja
-                    System.out.println("Tancant client...OK");
-                    return;//Si es posa return, els recursos no es tancaran
-                }
-
                 enviar.println(xat);
                 System.out.println("Missatge enviat...OK");
+
+                // Si el client ha usat la paraula clau, avisa i tanca
+                if (conteParaulaPerEspais(xat, clau)) {
+                    enviar.println("CLIENT_TANCA");
+                    System.out.println("Tancant client...OK");
+                    return;
+                }
 
                 resposta= rebre.readLine();
                 if(resposta==null){
@@ -76,5 +73,14 @@ public class Client {
             }
         }
 
+    }
+    private static boolean conteParaulaPerEspais(String text, String clau) {
+        if (text == null || clau == null){
+            return false;
+        }
+        String t = " " + text.trim() + " ";
+        String c = " " + clau.trim() + " ";
+
+        return t.toLowerCase().contains(c.toLowerCase());
     }
 }
