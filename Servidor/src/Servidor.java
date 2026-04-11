@@ -57,7 +57,7 @@ public class Servidor {
                 // enviem una unica linea especial amb el missatge inclos
                 if (conteParaulaPerEspais(missatgeS, clau)) {
                     System.out.println("Servidor ha enviat la seva paraula clau dins del missatge.");
-                    enviar.println("SERVIDOR_TANCA:" + missatgeS);
+                    enviar.println("SERVIDOR_TANCA:El servidor ha enviat la paraula clau dins del missatge");
                     System.out.println("Tancant connexió");
                     return;
                 }
