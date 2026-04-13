@@ -20,7 +20,7 @@ public class Servidor {
         String clau = args[1];
         System.out.println("Iniciant servidor en : " + port);
 
-        try {
+        try {//connexio i tal
             socketS = new ServerSocket(port);
             System.out.println("Servidor esperant al client");
             socketC = socketS.accept();
@@ -48,12 +48,9 @@ public class Servidor {
                     System.out.println("Tancant connexio...OK");
                     return;
                 }
-
-
                 missatgeS = scan.nextLine();
 
                 // Si el servidor envia la paraula clau, es tanca
-
                 if (conteParaulaPerEspais(missatgeS, clau)) {
                     System.out.println("Servidor ha enviat la seva paraula clau dins del missatge.");
                     enviar.println("SERVIDOR_TANCA:El servidor ha enviat la paraula clau dins del missatge");
