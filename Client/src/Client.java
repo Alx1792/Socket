@@ -16,7 +16,7 @@ public class Client {
             return;
         }
 
-        try { // Comprovar si hi ha 2 arguments
+        try {
 
             // Entrar arguments per terminal
             int port = Integer.parseInt(args[0]);
@@ -46,6 +46,7 @@ public class Client {
                 enviar.println(xat);
                 System.out.println("Missatge enviat...OK");
                 boolean clientTanca = conteParaulaPerEspais(xat, clau);
+                //faig la funcio aqui perque sino despues no se perque no me tanque be i al client no surt el missatge de tancar i despues coloco als llocs
 
                 resposta = rebre.readLine();
 
@@ -57,8 +58,7 @@ public class Client {
                     return;
                 }
 
-                // Si el servidor envia el missatge especial de tancament
-                // el client el mostra i tanca
+                // Si el servidor envia el missatge de tancar el client el mostra i tanca
                 if (resposta.startsWith("SERVIDOR_TANCA:")) {
                     String missatgeFinal = resposta.substring("SERVIDOR_TANCA:".length());
                     System.out.println("Servidor: " + missatgeFinal);
@@ -71,7 +71,7 @@ public class Client {
 
                 System.out.println("Servidor: " + resposta);
 
-                // Si el client ha enviat la paraula clau, despres de rebre la resposta/avis, tanca
+                // Si el client ha enviat la paraula clau, despres de rebre el avis de tancar, tanca
                 if(clientTanca){
                     System.out.println("Has enviat la paraula clau. Tancant client...OK");
                     return;
@@ -80,7 +80,7 @@ public class Client {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            try {
+            try {//tancar recursos
                 scan.close();
                 if (rebre != null) rebre.close();
                 if (enviar != null) enviar.close();

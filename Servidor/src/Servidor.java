@@ -42,8 +42,7 @@ public class Servidor {
 
                 System.out.println("Client diu: " + missatgeC);
 
-                // Si el client envia la paraula clau dins del missatge
-                // el servidor ho mostra i tanca
+                // Si el client envia la paraula clau dins del missatge, el servidor ho mostra i tanca
                 if (conteParaulaPerEspais(missatgeC, clau)) {
                     System.out.println("Client ha enviat la paraula clau dins del missatge");
                     System.out.println("Tancant connexio...OK");
@@ -68,7 +67,7 @@ public class Servidor {
             }
         } catch (Exception e) {
             System.out.println("Error al servidor " + e.getMessage());
-        } finally {
+        } finally {//Tancar recursos
             try {
                 scan.close();
                 if (rebre != null) rebre.close();
