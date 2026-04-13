@@ -53,8 +53,8 @@ public class Servidor {
                 System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
                 missatgeS = scan.nextLine();
 
-                // Si el servidor envia la paraula clau,
-                // enviem una unica linea especial amb el missatge inclos
+                // Si el servidor envia la paraula clau, es tanca
+
                 if (conteParaulaPerEspais(missatgeS, clau)) {
                     System.out.println("Servidor ha enviat la seva paraula clau dins del missatge.");
                     enviar.println("SERVIDOR_TANCA:El servidor ha enviat la paraula clau dins del missatge");
