@@ -9,6 +9,7 @@ public class Client {
         PrintWriter enviar = null;
         BufferedReader rebre = null;
 
+
         if (args.length != 2) {
             System.out.println("Has d'entrar dos arguments, primer el port i despues la paraula clau");
             scan.close();
@@ -44,10 +45,14 @@ public class Client {
                 xat = scan.nextLine();
                 enviar.println(xat);
                 System.out.println("Missatge enviat...OK");
+                boolean clientTanca = conteParaulaPerEspais(xat, clau);
 
                 resposta = rebre.readLine();
 
                 if (resposta == null) {
+                    if(clientTanca){
+                        System.out.println("Has enviat la paraula clau. Tancant client...OK");
+                    }
                     System.out.println("El servidor ha tancat la connexió.");
                     return;
                 }
@@ -57,6 +62,9 @@ public class Client {
                 if (resposta.startsWith("SERVIDOR_TANCA:")) {
                     String missatgeFinal = resposta.substring("SERVIDOR_TANCA:".length());
                     System.out.println("Servidor: " + missatgeFinal);
+                    if(clientTanca){
+                        System.out.println("Has enviat la paraula clau. Tancant client...OK");
+                    }
                     System.out.println("El servidor ha indicat que tanca la connexió.");
                     return;
                 }
@@ -64,7 +72,7 @@ public class Client {
                 System.out.println("Servidor: " + resposta);
 
                 // Si el client ha enviat la paraula clau, despres de rebre la resposta/avis, tanca
-                if (conteParaulaPerEspais(xat, clau)) {
+                if(clientTanca){
                     System.out.println("Has enviat la paraula clau. Tancant client...OK");
                     return;
                 }

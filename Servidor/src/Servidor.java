@@ -31,7 +31,7 @@ public class Servidor {
 
             String missatgeC;
             String missatgeS;
-
+            System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
             while (true) {
                 missatgeC = rebre.readLine();
 
@@ -50,7 +50,7 @@ public class Servidor {
                     return;
                 }
 
-                System.out.println("Servidor, escriu la paraula clau per tancar la connexio");
+
                 missatgeS = scan.nextLine();
 
                 // Si el servidor envia la paraula clau, es tanca
