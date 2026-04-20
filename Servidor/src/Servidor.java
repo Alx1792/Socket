@@ -39,6 +39,12 @@ public class Servidor {
                     System.out.println("Client ha tancat la connexio");
                     return;
                 }
+                else if (missatgeC.startsWith("CLIENT_TANCA:")) {
+                    String missatgeFinal = missatgeC.substring("SERVIDOR_TANCA:".length());
+                    System.out.println("Client diu: " + missatgeFinal);
+                    System.out.println("El client ha indicat que tanca la connexió.");
+                    return;
+                }
 
                 System.out.println("Client diu: " + missatgeC);
 

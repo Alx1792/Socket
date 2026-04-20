@@ -41,20 +41,26 @@ public class Client {
             System.out.println("Si vols tancar la connexió, escriu la paraula clau");
 
             while (true) {
-
                 xat = scan.nextLine();
+                boolean clientTanca = conteParaulaPerEspais(xat, clau);
+
+                // Si el client ha enviat la paraula clau, despres de rebre el avis de tancar, tanca
+                if (clientTanca) {
+                    enviar.println("CLIENT_TANCA:El client ha enviat la paraula clau dins del missatge");
+                    return;
+                }
+
                 enviar.println(xat);
                 System.out.println("Missatge enviat...OK");
-                boolean clientTanca = conteParaulaPerEspais(xat, clau);
-                //faig la funcio aqui perque sino despues no se perque no me tanque be i al client no surt el missatge de tancar i despues coloco als llocs
 
                 resposta = rebre.readLine();
 
                 if (resposta == null) {
-                    if(clientTanca){
-                        System.out.println("Has enviat la paraula clau. Tancant client...OK");
-                    }
                     System.out.println("El servidor ha tancat la connexió.");
+                    return;
+                }
+                else if (conteParaulaPerEspais(resposta, clau)) {
+                    enviar.println("CLIENT_TANCA:El servidor ha enviat la paraula clau dins del missatge");
                     return;
                 }
 
@@ -62,20 +68,11 @@ public class Client {
                 if (resposta.startsWith("SERVIDOR_TANCA:")) {
                     String missatgeFinal = resposta.substring("SERVIDOR_TANCA:".length());
                     System.out.println("Servidor: " + missatgeFinal);
-                    if(clientTanca){
-                        System.out.println("Has enviat la paraula clau. Tancant client...OK");
-                    }
                     System.out.println("El servidor ha indicat que tanca la connexió.");
                     return;
                 }
 
                 System.out.println("Servidor: " + resposta);
-
-                // Si el client ha enviat la paraula clau, despres de rebre el avis de tancar, tanca
-                if(clientTanca){
-                    System.out.println("Has enviat la paraula clau. Tancant client...OK");
-                    return;
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
